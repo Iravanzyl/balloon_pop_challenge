@@ -11,19 +11,40 @@ body {
 
 .page-header {
     text-align: center;
-    background-color: #1d3557;
-    color: white;
-    padding: 24px 16px;
+    background: linear-gradient(to bottom, #48cae4, #90e0ef, #caf0f8);
+    color: #1d3557;
+    padding: 36px 16px;
+    border-bottom: 4px solid #0096c7;
 }
 
 .page-header h1 {
     margin: 0 0 8px 0;
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+    color: #03045e;
 }
 
-.page-header p {
-    margin: 0;
+.header-emoji {
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+    animation: bounce 1.5s infinite;
+    display: block;
 }
 
+.header-tagline {
+    font-size: 1.1rem;
+    color: #023e8a;
+    margin-top: 8px !important;
+}
+
+.setup-card {
+    border-top: 5px solid #0096c7 !important;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
 .container {
     width: min(900px, 95%);
     margin: 24px auto;
@@ -76,21 +97,33 @@ legend {
 .button-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 18px;
+    justify-content: center;
 }
 
 button {
-    padding: 10px 14px;
+    padding: 12px 20px;
     border: none;
-    border-radius: 8px;
-    background-color: #457b9d;
+    border-radius: 25px;
+    background-color: #0096c7;
     color: white;
     cursor: pointer;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    transition: transform 0.1s ease, background-color 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 button:hover {
-    background-color: #355f79;
+    background-color: #0077b6;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
 
 .preview-box {
@@ -107,6 +140,7 @@ button:hover {
 
 .game-stats-grid {
     grid-template-columns: repeat(3, 1fr);
+    margin-top: 20px;
 }
 
 .stat-box {
@@ -240,49 +274,163 @@ button:hover {
 /* Classic theme - default */
 
 /* Party theme */
-body.theme-party {
-    background: linear-gradient(135deg, #ff9ff3, #ffeaa7);
-}
-
-body.theme-party .card {
-    background: #fff0fb;
-    border-color: #ff6eb4;
-}
-
 body.theme-party .sky-area {
-    background: linear-gradient(to bottom, #ff9ff3 0%, #ffeaa7 100%);
+    background: linear-gradient(to bottom, #fff5f5 0%, #ffe0e0 60%, #fff0fb 100%);
+}
+
+body.theme-party button {
+    background-color: #e63946;
+}
+
+body.theme-party button:hover {
+    background-color: #c1121f;
+}
+
+body.theme-party .stat-box {
+    border-left: 4px solid #e63946;
+}
+
+body.theme-party button {
+    background-color: #e63946;
+}
+
+body.theme-party button:hover {
+    background-color: #c1121f;
+}
+
+body.theme-party .stat-box {
+    background: #fff0e0;
+    border-left: 4px solid #e63946;
+}
+
+/* Confetti */
+.confetti-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+}
+
+.confetti-piece {
+    position: absolute;
+    top: -10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
 
 /* Space theme */
-body.theme-space {
-    background: linear-gradient(135deg, #0f0c29, #302b63);
-    color: #ffffff;
-}
-
-body.theme-space .card {
-    background: #1a1a2e;
-    border-color: #4a4aff;
-    color: #ffffff;
-}
-
 body.theme-space .sky-area {
     background: linear-gradient(to bottom, #0f0c29 0%, #1a1a4e 60%, #2d1b69 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+body.theme-space .sky-area::before {
+    content: "🌙";
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 3rem;
+    z-index: 1;
+    animation: moonGlow 3s ease-in-out infinite;
+}
+
+
+body.theme-space button {
+    background-color: #4a4aff;
+}
+
+body.theme-space button:hover {
+    background-color: #3333cc;
 }
 
 body.theme-space .stat-box {
-    background: #2d2d44;
-    color: #ffffff;
+    border-left: 4px solid #4a4aff;
 }
 
-body.theme-space .label {
-    color: #a0aec0;
+@keyframes moonGlow {
+    0%, 100% { text-shadow: 0 0 10px #fffacd; }
+    50% { text-shadow: 0 0 30px #fffacd, 0 0 60px #ffd700; }
 }
 
-body.theme-space .board-info {
-    color: #ffffff;
+/* Game Over Screen */
+.game-over-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    border-radius: 12px;
 }
 
-body.theme-space .message-area {
-    background: #0a0a1a;
-    color: #e0e0ff;
+.game-over-screen.hidden {
+    display: none;
 }
+
+.game-over-box {
+    background: white;
+    border-radius: 16px;
+    padding: 36px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    min-width: 280px;
+}
+
+.game-over-emoji {
+    font-size: 3.5rem;
+    animation: bounce 1s infinite;
+}
+
+.game-over-box h2 {
+    font-size: 2rem;
+    margin: 10px 0;
+    color: #0096c7;
+}
+
+.game-over-box p {
+    color: #4b5563;
+    margin-bottom: 16px;
+    font-size: 1.1rem;
+}
+
+.game-over-stats {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+.go-stat {
+    background: #eef5ff;
+    border-radius: 10px;
+    padding: 12px 20px;
+    min-width: 70px;
+}
+
+.go-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+.go-stat span:last-child {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #0096c7;
+}
+

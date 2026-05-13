@@ -68,6 +68,29 @@
         </div>
 
         <div id="skyArea" class="sky-area"></div>
+
+        <div id="gameOverScreen" class="game-over-screen hidden">
+            <div class="game-over-box">
+                <div class="game-over-emoji">🎈</div>
+                <h2>Game Over!</h2>
+                <p id="gameOverPlayer"></p>
+                <div class="game-over-stats">
+                    <div class="go-stat">
+                        <span class="go-label">Score</span>
+                        <span id="goScore">0</span>
+                    </div>
+                    <div class="go-stat">
+                        <span class="go-label">Popped</span>
+                        <span id="goPopped">0</span>
+                    </div>
+                    <div class="go-stat">
+                        <span class="go-label">Escaped</span>
+                        <span id="goEscaped">0</span>
+                    </div>
+                </div>
+        <button id="playAgainBtn">Play Again</button>
+    </div>
+</div>
       </section>
 
       <section class="card">
@@ -76,6 +99,7 @@
       </section>
     </main>
 
-    <script src="game.js"></script>
-  </body>
+      <div id="confettiContainer" class="confetti-container"></div>
+  <script src="game.js"></script>
+</body>
 </html>

@@ -11,7 +11,7 @@ function getCookie(name) {
 }
 
 // Read settings from storage
-let savedName = getCookie("playerName");
+let savedName = sessionStorage.getItem("playerName") || decodeURIComponent(getCookie("playerName"));
 let savedDifficulty = getCookie("difficulty");
 let savedLength = sessionStorage.getItem("gameLength");
 let savedTheme = sessionStorage.getItem("theme");
@@ -62,6 +62,29 @@ let game = {
 let balloons = [];
 let gameLog = [];
 
+// Sound function using Web Audio API
+function playPopSound() {
+    let soundOn = sessionStorage.getItem("soundEnabled");
+    if (soundOn !== "true") return;
+
+    let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let oscillator = audioCtx.createOscillator();
+    let gainNode = audioCtx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(520, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime + 0.15);
+
+    gainNode.gain.setValueAtTime(0.6, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+
+    oscillator.start(audioCtx.currentTime);
+    oscillator.stop(audioCtx.currentTime + 0.15);
+}
+
 // Display initial settings function
 function displaySettings() {
     displayPlayer.textContent = game.playerName;
@@ -81,6 +104,9 @@ function applyTheme() {
 displaySettings();
 applyTheme();
 
+// Make sure game over screen is hidden on load
+document.getElementById("gameOverScreen").classList.add("hidden");
+
 // Start the game function
 function getSpawnRate() {
     if (game.difficulty === "easy") return 2000;
@@ -98,10 +124,11 @@ function startGame() {
     if (game.running) return;
 
     // Ask for name if not set
-    if (game.playerName === "Unknown") {
+    if (!game.playerName || game.playerName === "Unknown" || game.playerName === "") {
         let name = prompt("Please enter your name to start:");
         if (name && name.trim() !== "") {
             game.playerName = name.trim();
+            displayPlayer.textContent = game.playerName;
         }
     }
 
@@ -142,7 +169,9 @@ function addLog(message) {
 }
 
 // Balloon colours array
-let balloonColours = ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#e91e63"];
+let balloonColours = game.theme === "space" 
+    ? ["#4a4aff", "#7b2fff", "#00d4ff", "#ff00ff", "#c0c0ff", "#9400d3"]
+    : ["#e74c3c", "#3498db", "#2ecc71", "#f39c12", "#9b59b6", "#e91e63"];
 
 // Spawn function
 function spawnBalloon() {
@@ -200,6 +229,7 @@ function popBalloon(balloon, isBonus) {
     let points = isBonus ? 5 : 1;
     if (game.doublePoints) points = points * 2;
 
+    playPopSound();
     game.score += points;
     game.popped++;
 
@@ -338,13 +368,48 @@ function endGame() {
     }
 
     messageArea.textContent = "Game Over! Final score: " + game.score;
+    launchConfetti();
     addLog("Game over - Final score: " + game.score + " | Popped: " + game.popped + " | Escaped: " + game.escaped);
 
-    alert("Game Over!\nPlayer: " + game.playerName + "\nScore: " + game.score + "\nPopped: " + game.popped + "\nEscaped: " + game.escaped);
+    // Show game over screen
+    document.getElementById("gameOverPlayer").textContent = "Well done, " + game.playerName + "!";
+    document.getElementById("goScore").textContent = game.score;
+    document.getElementById("goPopped").textContent = game.popped;
+    document.getElementById("goEscaped").textContent = game.escaped;
+    document.getElementById("gameOverScreen").classList.remove("hidden");
 }
 
+// Confetti for party theme
+function launchConfetti() {
+    if (game.theme !== "party") return;
+    let container = document.getElementById("confettiContainer");
+    if (!container) return;
+    
+    let colours = ["#e63946", "#1d6edd", "#ffd700", "#2ecc71", "#f4a261"];
+    
+    for (let i = 0; i < 80; i++) {
+        let piece = document.createElement("div");
+        piece.classList.add("confetti-piece");
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.backgroundColor = colours[Math.floor(Math.random() * colours.length)];
+        piece.style.animationDuration = (Math.random() * 2 + 2) + "s";
+        piece.style.animationDelay = (Math.random() * 2) + "s";
+        piece.style.width = (Math.random() * 8 + 6) + "px";
+        piece.style.height = (Math.random() * 8 + 6) + "px";
+        container.appendChild(piece);
+        
+        setTimeout(function() { piece.remove(); }, 4000);
+    }
+}
 
-
+// Play Again button
+let playAgainBtn = document.getElementById("playAgainBtn");
+if (playAgainBtn) {
+    playAgainBtn.addEventListener("click", function() {
+        document.getElementById("gameOverScreen").classList.add("hidden");
+        resetGame();
+    });
+}
 
 
 

@@ -129,7 +129,14 @@ function openGame() {
         return;
     }
 
-    saveSettings();
+    // Save to sessionStorage so game window can read it immediately
+    sessionStorage.setItem("playerName", name);
+    sessionStorage.setItem("gameLength", gameLength.value);
+    sessionStorage.setItem("theme", document.querySelector('input[name="theme"]:checked').value);
+    sessionStorage.setItem("soundEnabled", soundEnabled.checked);
+    sessionStorage.setItem("doublePoints", doublePoints.checked);
+    sessionStorage.setItem("bonusBalloons", bonusBalloons.checked);
+
     window.open("game.html", "_blank");
 }
 
