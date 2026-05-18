@@ -145,6 +145,9 @@ function startGame() {
 
     game.timerInterval = setInterval(updateTimer, 1000);
     game.spawnInterval = setInterval(spawnBalloon, getSpawnRate());
+
+    // Scroll to balloon area automatically
+    document.getElementById("skyArea").scrollIntoView({ behavior: "smooth" });
 }
 
 startBtn.addEventListener("click", startGame);
@@ -408,6 +411,14 @@ if (playAgainBtn) {
     playAgainBtn.addEventListener("click", function() {
         document.getElementById("gameOverScreen").classList.add("hidden");
         resetGame();
+    });
+}
+
+// Back to Settings button on Game Over screen
+let backToSettingsBtn = document.getElementById("backToSettingsBtn");
+if (backToSettingsBtn) {
+    backToSettingsBtn.addEventListener("click", function() {
+        window.close();
     });
 }
 

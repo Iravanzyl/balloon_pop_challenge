@@ -9,7 +9,6 @@ let previewText = document.getElementById("previewText");
 
 // Get all buttons
 let openGameBtn = document.getElementById("openGameBtn");
-let saveSettingsBtn = document.getElementById("saveSettingsBtn");
 let loadSettingsBtn = document.getElementById("loadSettingsBtn");
 let resetSettingsBtn = document.getElementById("resetSettingsBtn");
 
@@ -57,7 +56,8 @@ function saveSettings() {
     alert("Settings saved!");
 }
 
-saveSettingsBtn.addEventListener("click", saveSettings);
+// Change 8 - Save Settings button removed
+// saveSettingsBtn.addEventListener("click", saveSettings);
 
 // Cookie reader function
 function getCookie(name) {

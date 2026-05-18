@@ -53,6 +53,8 @@ body {
 .game-window-wrap {
     width: min(1100px, 96%);
     margin: 20px auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .card {
@@ -434,3 +436,7 @@ body.theme-space .stat-box {
     color: #0096c7;
 }
 
+/* Scroll to game area */
+.sky-area-card {
+    scroll-margin-top: 10px;
+}
